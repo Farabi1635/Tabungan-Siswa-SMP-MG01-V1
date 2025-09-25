@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Tabungan Siswa SMP MG01</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo-container">
+                <img src="logo_sekolah.jpg" alt="Logo Sekolah" class="school-logo">
+                <div class="school-info">
+                    <h1>SMP Mangun Jaya 01</h1>
+                    <p>Aplikasi Tabungan & Pengeluaran Siswa</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="export-btn" class="btn-secondary">
+                    <i class="fas fa-download"></i> Ekspor Data
+                </button>
+                <button id="reset-btn" class="btn-danger">
+                    <i class="fas fa-trash"></i> Reset Data
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Quick Stats Section -->
+        <section class="quick-stats">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Total Siswa</h3>
+                    <p id="total-siswa">0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-piggy-bank"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Tabungan Masuk</h3>
+                    <p id="quick-setoran">Rp 0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-hand-holding-usd"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Pengeluaran</h3>
+                    <p id="quick-penarikan">Rp 0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Saldo Akhir</h3>
+                    <p id="quick-saldo">Rp 0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Input Section -->
+        <section class="card input-section">
+            <div class="section-header">
+                <h2><i class="fas fa-plus-circle"></i> Catat Transaksi Baru</h2>
+                <button id="toggle-form" class="btn-icon">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+            <form id="form-transaksi-sederhana" class="collapsible-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="input-nama-siswa">Nama Siswa</label>
+                        <select id="input-nama-siswa" required>
+                            <option value="">-- Pilih Nama Siswa --</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="input-jenis">Jenis Transaksi</label>
+                        <select id="input-jenis" required>
+                            <option value="">Pilih Jenis</option>
+                            <option value="Setoran">Setoran (Tabungan Masuk)</option>
+                            <option value="Penarikan">Penarikan (Pengeluaran)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="input-jumlah">Jumlah (Rp)</label>
+                        <input type="number" id="input-jumlah" placeholder="Contoh: 50000" min="1000" required>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> Catat Transaksi
+                    </button>
+                    <button type="reset" class="btn-secondary">
+                        <i class="fas fa-times"></i> Batal
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Saldo Section -->
+        <section class="card saldo-section">
+            <h2><i class="fas fa-chart-bar"></i> Rekap Saldo Total Sekolah</h2>
+            <div id="rekap-summary">
+                <div class="summary-box deposit-box">
+                    <div class="summary-icon">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="summary-content">
+                        <h4>Total Tabungan Masuk</h4>
+                        <p id="total-setoran-display" class="amount deposit-text">Rp 0</p>
+                    </div>
+                </div>
+                <div class="summary-box withdrawal-box">
+                    <div class="summary-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="summary-content">
+                        <h4>Total Pengeluaran</h4>
+                        <p id="total-penarikan-display" class="amount withdrawal-text">Rp 0</p>
+                    </div>
+                </div>
+                <div class="summary-box saldo-akhir-box">
+                    <div class="summary-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <div class="summary-content">
+                        <h4>SALDO AKHIR KESELURUHAN</h4>
+                        <p id="saldo-akhir-display" class="amount">Rp 0</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Individual Report Section -->
+        <section class="card history-section" id="individual-report">
+            <div class="section-header">
+                <h2><i class="fas fa-user-graduate"></i> Sisa Tabungan Per Siswa</h2>
+                <div class="section-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-siswa" placeholder="Cari siswa...">
+                    </div>
+                    <button id="sort-siswa" class="btn-icon">
+                        <i class="fas fa-sort-amount-down"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table id="saldo-per-siswa-table">
+                    <thead>
+                        <tr>
+                            <th>Nama Siswa</th>
+                            <th>Kelas</th>
+                            <th>Sisa Tabungan</th>
+                            <th>Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody id="saldo-per-siswa-body">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Transaction History Section -->
+        <section class="card history-section">
+            <div class="section-header">
+                <h2><i class="fas fa-history"></i> Riwayat Transaksi Detail</h2>
+                <div class="section-actions">
+                    <div class="filter-options">
+                        <select id="filter-jenis">
+                            <option value="">Semua Jenis</option>
+                            <option value="Setoran">Setoran</option>
+                            <option value="Penarikan">Penarikan</option>
+                        </select>
+                        <select id="filter-kelas">
+                            <option value="">Semua Kelas</option>
+                            <option value="VII">Kelas VII</option>
+                            <option value="VIII">Kelas VIII</option>
+                            <option value="IX">Kelas IX</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="table-container">
+                <table id="transaction-history">
+                    <thead>
+                        <tr>
+                            <th>Tgl</th>
+                            <th>Nama Siswa</th>
+                            <th>Kelas</th>
+                            <th>Jenis</th>
+                            <th>Jumlah</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for Student Details -->
+    <div id="student-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detail Tabungan Siswa</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="student-details">
+                    <!-- Student details will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="main-footer">
+    <strong>
+        <span>v1.0.0</span> |   &copy; <span id="currentYear"></span> <a href="#">SMP Mangun Jaya 01</a>.
+    </strong>
+    All rights reserved.
+</footer>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-content">
+            <i class="fas fa-check-circle"></i>
+            <span id="toast-message">Transaksi berhasil dicatat!</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
